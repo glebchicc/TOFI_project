@@ -13,6 +13,7 @@ namespace TOFI_project
         static string constring = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PASSWORD=" + password + ";";
 
         static string verCode = "";
+        static int userID; 
 
         MySqlConnection connection = new MySqlConnection(constring);
 
@@ -56,6 +57,7 @@ namespace TOFI_project
                                 label3.Visible = true;
                                 codeBox.Visible = true;
                                 button2.Visible = true;
+                                _ = int.TryParse(reader["userID"].ToString(), out userID);
                             }
                             catch (Exception ex)
                             {
@@ -82,6 +84,9 @@ namespace TOFI_project
             if (codeBox.Text == verCode)
             {
                 MessageBox.Show("¬ход успешен!", "”спех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Main formMain = new Main(userID);
+                formMain.Show();
+                this.Hide();
             }
             else
             {

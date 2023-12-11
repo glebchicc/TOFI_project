@@ -31,3 +31,6 @@ D:\projects\ТОФИ\TOFI_project\bin\Debug\net7.0-windows\runtimes\win-x64\nati
 D:\projects\ТОФИ\TOFI_project\bin\Debug\net7.0-windows\runtimes\win-x64\native\krbcc64.dll
 D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.csproj.CopyComplete
 D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.Form2.resources
+D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.Main.resources
+D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.Accounts.resources
+D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.CreateAccount.resources
