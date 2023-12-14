@@ -26,7 +26,7 @@ namespace TOFI_project
             dt.Columns.Add("Currency");
 
             connection.Open();
-            string conutquery = "select COUNT(*) from BankAccount";
+            string conutquery = "select COUNT(*) from Currency";
             MySqlCommand countcmd = new MySqlCommand(conutquery, connection);
             int count;
             int.TryParse(countcmd.ExecuteScalar().ToString(), out count);

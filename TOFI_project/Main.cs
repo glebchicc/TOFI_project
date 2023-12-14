@@ -28,7 +28,8 @@ namespace TOFI_project
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            Transaction transaction = new Transaction(userID);
+            transaction.ShowDialog();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -43,7 +44,8 @@ namespace TOFI_project
 
         private void button5_Click(object sender, EventArgs e)
         {
-
+            TransactionHistory transactionHistory = new TransactionHistory(userID);
+            transactionHistory.ShowDialog();
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
