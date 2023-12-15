@@ -39,7 +39,8 @@ namespace TOFI_project
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            Credit credit = new Credit(userID);
+            credit.ShowDialog();
         }
 
         private void button5_Click(object sender, EventArgs e)

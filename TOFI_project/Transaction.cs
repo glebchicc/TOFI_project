@@ -55,6 +55,12 @@ namespace TOFI_project
             int senderCurrency = -1;
             int recipientCurrency = -1;
 
+            if (!(recipientBox.Text.Length > 0 && moneyBox.Text.Length > 0))
+            {
+                MessageBox.Show("Заполните все поля формы.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (accounts[comboBox1.SelectedIndex].Split(" ")[0] == recipientBox.Text)
             {
                 MessageBox.Show("Номера счетов отправителя и получателя не могут совпадать.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);

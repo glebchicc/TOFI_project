@@ -65,6 +65,7 @@ namespace TOFI_project
         private void button1_Click(object sender, EventArgs e)
         {
             InitializeComponent();
+            connection.Open();
             DataTable dt = new DataTable();
             dt.Columns.Add("Transaction Date");
             dt.Columns.Add("Sum");

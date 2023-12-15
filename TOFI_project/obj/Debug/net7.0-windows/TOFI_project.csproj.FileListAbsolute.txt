@@ -36,3 +36,4 @@ D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.Accounts
 D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.CreateAccount.resources
 D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.Transaction.resources
 D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.TransactionHistory.resources
+D:\projects\ТОФИ\TOFI_project\obj\Debug\net7.0-windows\TOFI_project.Credit.resources
