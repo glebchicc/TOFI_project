@@ -1,14 +1,15 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
+using System.Globalization;
 
 namespace TOFI_project
 {
     public partial class MyCredits : Form
     {
-        static string server = "localhost";
-        static string database = "TOFI";
-        static string username = "root";
-        static string password = "root";
+        static string server = "sql11.freesqldatabase.com";
+        static string database = "sql11671897";
+        static string username = "sql11671897";
+        static string password = "LdMIXqLdtS";
         static string constring = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PASSWORD=" + password + ";";
         MySqlConnection connection = new MySqlConnection(constring);
 
@@ -108,37 +109,40 @@ namespace TOFI_project
                 {
                     string balancequery = $"select balance from BankAccount where number = {accounts[comboBox2.SelectedIndex].Split(" ")[0]}";
                     MySqlCommand balancecmd = new MySqlCommand(balancequery, connection);
-                    double balance = Convert.ToDouble(balancecmd.ExecuteScalar());
+                    double balance = Convert.ToDouble(balancecmd.ExecuteScalar(), CultureInfo.InvariantCulture);
 
                     string monthquery = $"select monthlyPayment from Loan where loanID = {comboBox1.Items[comboBox1.SelectedIndex]}";
                     MySqlCommand monthcmd = new MySqlCommand(monthquery, connection);
-                    double monthPayment = Convert.ToDouble(monthcmd.ExecuteScalar());
+                    double monthPayment = double.Round(Convert.ToDouble(monthcmd.ExecuteScalar(), CultureInfo.InvariantCulture), 2);
 
                     string sumquery = $"select sum from Loan where loanID = {comboBox1.Items[comboBox1.SelectedIndex]}";
                     MySqlCommand sumcmd = new MySqlCommand(sumquery, connection);
-                    double sumleft = Convert.ToDouble(sumcmd.ExecuteScalar());
+                    double sumleft = double.Round(Convert.ToDouble(sumcmd.ExecuteScalar(), CultureInfo.InvariantCulture), 2);
 
                     if (sumleft > 0)
                     {
                         if (balance >= monthPayment)
                         {
+                            NumberFormatInfo nfi = new NumberFormatInfo();
+                            nfi.NumberDecimalSeparator = ".";
+
                             if (monthPayment > sumleft)
                             {
-                                string minusBalance = $"update BankAccount set balance = balance - {sumleft} where number = {accounts[comboBox2.SelectedIndex].Split(" ")[0]}";
+                                string minusBalance = $"update BankAccount set balance = balance - {sumleft.ToString(nfi)} where number = {accounts[comboBox2.SelectedIndex].Split(" ")[0]}";
                                 MySqlCommand minusBalanceCMD = new MySqlCommand(minusBalance, connection);
                                 minusBalanceCMD.ExecuteNonQuery();
 
-                                string minusMonth = $"update Loan set sum = sum - {sumleft} where loanID = {comboBox1.Items[comboBox1.SelectedIndex]}";
+                                string minusMonth = $"update Loan set sum = sum - {sumleft.ToString(nfi)} where loanID = {comboBox1.Items[comboBox1.SelectedIndex]}";
                                 MySqlCommand minusMonthCMD = new MySqlCommand(minusMonth, connection);
                                 minusMonthCMD.ExecuteNonQuery();
                             }
                             else
                             {
-                                string minusBalance = $"update BankAccount set balance = balance - {monthPayment} where number = {accounts[comboBox2.SelectedIndex].Split(" ")[0]}";
+                                string minusBalance = $"update BankAccount set balance = balance - {monthPayment.ToString(nfi)} where number = {accounts[comboBox2.SelectedIndex].Split(" ")[0]}";
                                 MySqlCommand minusBalanceCMD = new MySqlCommand(minusBalance, connection);
                                 minusBalanceCMD.ExecuteNonQuery();
 
-                                string minusMonth = $"update Loan set sum = sum - {monthPayment} where loanID = {comboBox1.Items[comboBox1.SelectedIndex]}";
+                                string minusMonth = $"update Loan set sum = sum - {monthPayment.ToString(nfi)} where loanID = {comboBox1.Items[comboBox1.SelectedIndex]}";
                                 MySqlCommand minusMonthCMD = new MySqlCommand(minusMonth, connection);
                                 minusMonthCMD.ExecuteNonQuery();
                             }
@@ -200,14 +204,14 @@ namespace TOFI_project
                         }
                         else
                         {
-                            MessageBox.Show("Этот кредит уже оплачен.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("На вашем счете недостаточно средств.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             connection.Close();
                             return;
                         }
                     }
                     else
                     {
-                        MessageBox.Show("На вашем счете недостаточно средств.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Этот кредит уже оплачен.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         connection.Close();
                         return;
                     }

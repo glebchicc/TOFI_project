@@ -290,17 +290,17 @@
         private Label label1;
         private TextBox monthsBox;
         private Label label2;
-        private TextBox textBox1;
-        private ComboBox comboBox2;
         private Label label3;
         private Label label4;
-        private TextBox textBox2;
-        private ComboBox comboBox3;
         private Label label6;
         private Button button1;
-        private Button button2;
         private Label label7;
         private Label label8;
         private TextBox resultText;
+        public TextBox textBox1;
+        public ComboBox comboBox2;
+        public TextBox textBox2;
+        public ComboBox comboBox3;
+        public Button button2;
     }
 }

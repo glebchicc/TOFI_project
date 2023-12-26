@@ -55,21 +55,22 @@ namespace TOFI_project
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(36, 15);
             this.label1.TabIndex = 1;
-            this.label1.Text = "email";
+            this.label1.Text = "Email";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(163, 74);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 15);
+            this.label2.Size = new System.Drawing.Size(49, 15);
             this.label2.TabIndex = 3;
-            this.label2.Text = "password";
+            this.label2.Text = "Пароль";
             // 
             // passwordBox
             // 
             this.passwordBox.Location = new System.Drawing.Point(161, 94);
             this.passwordBox.Name = "passwordBox";
+            this.passwordBox.PasswordChar = '*';
             this.passwordBox.Size = new System.Drawing.Size(167, 23);
             this.passwordBox.TabIndex = 2;
             // 
@@ -78,15 +79,16 @@ namespace TOFI_project
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(163, 197);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(95, 15);
+            this.label3.Size = new System.Drawing.Size(105, 15);
             this.label3.TabIndex = 5;
-            this.label3.Text = "verification code";
+            this.label3.Text = "Код верификации";
             this.label3.Visible = false;
             // 
             // codeBox
             // 
             this.codeBox.Location = new System.Drawing.Point(161, 217);
             this.codeBox.Name = "codeBox";
+            this.codeBox.PasswordChar = '*';
             this.codeBox.Size = new System.Drawing.Size(167, 23);
             this.codeBox.TabIndex = 4;
             this.codeBox.Visible = false;

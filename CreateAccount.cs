@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace TOFI_project
@@ -6,10 +7,10 @@ namespace TOFI_project
     public partial class CreateAccount : Form
     {
         static int userID;
-        static string server = "localhost";
-        static string database = "TOFI";
-        static string username = "root";
-        static string password = "root";
+        static string server = "sql11.freesqldatabase.com";
+        static string database = "sql11671897";
+        static string username = "sql11671897";
+        static string password = "LdMIXqLdtS";
         static string constring = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PASSWORD=" + password + ";";
         MySqlConnection connection = new MySqlConnection(constring);
 
@@ -28,16 +29,16 @@ namespace TOFI_project
         {
             if (comboBox1.SelectedIndex != -1 && BalanceBox.Text.Length > 0) 
             {
-                if (!Regex.IsMatch(BalanceBox.Text, "^(?:-(?:[1-9](?:\\d{0,2}(?:,\\d{3})+|\\d*))|(?:0|(?:[1-9](?:\\d{0,2}(?:,\\d{3})+|\\d*))))(?:.\\d+|)$"))
+                if (!Regex.IsMatch(BalanceBox.Text, "[+-]?([0-9]*[.])?[0-9]+"))
                 {
-                    MessageBox.Show("Начальный баланс должен быть целым или вещественным положительным числом.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Начальный баланс должен быть целым или вещественным положительным числом c точкой-разделителем.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     throw new TestException("Начальный баланс должен быть целым или вещественным положительным числом.");
                     //return;
                 }
 
-                if (Convert.ToDouble(BalanceBox.Text) < 0)
+                if (Convert.ToDouble(BalanceBox.Text, CultureInfo.InvariantCulture) < 0)
                 {
-                    MessageBox.Show("Начальный баланс должен быть целым или вещественным положительным числом.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Начальный баланс должен быть целым или вещественным положительным числом с точкой-разделителем.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     throw new TestException("Начальный баланс должен быть целым или вещественным положительным числом.");
                     //return;
                 }
@@ -70,9 +71,9 @@ namespace TOFI_project
                     MySqlCommand cmd = new MySqlCommand(query, connection);
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Создание счета успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    connection.Close();
                     Accounts formAccounts = new Accounts(userID);
                     formAccounts.Show();
+                    connection.Close();
                     this.Close();
                     return;
                 }

@@ -124,11 +124,11 @@
 
         #endregion
         private Label label5;
-        private TextBox recipientBox;
-        private ComboBox comboBox1;
         private Label label9;
         private Label label1;
-        private TextBox moneyBox;
-        private Button button1;
+        public TextBox recipientBox;
+        public ComboBox comboBox1;
+        public TextBox moneyBox;
+        public Button button1;
     }
 }

@@ -6,10 +6,10 @@ namespace TOFI_project
 {
     public partial class Form1 : Form
     {
-        static string server = "localhost";
-        static string database = "TOFI";
-        static string username = "root";
-        static string password = "root";
+        static string server = "sql11.freesqldatabase.com";
+        static string database = "sql11671897";
+        static string username = "sql11671897";
+        static string password = "LdMIXqLdtS";
         static string constring = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PASSWORD=" + password + ";";
 
         static string verCode = "";
@@ -25,7 +25,7 @@ namespace TOFI_project
         private void button1_Click(object sender, EventArgs e)
         {
             connection.Open();
-            string query = "select * from user where email = '" + emailBox.Text + "';";
+            string query = "select * from User where email = '" + emailBox.Text + "';";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader reader = cmd.ExecuteReader();
             if (reader.HasRows)

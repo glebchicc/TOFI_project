@@ -1,16 +1,19 @@
 ﻿using MySql.Data.MySqlClient;
+using System.Globalization;
+using static TOFI_project.CreateAccount;
+using System.Text.RegularExpressions;
 
 namespace TOFI_project
 {
     public partial class Transaction : Form
     {
-        static string server = "localhost";
-        static string database = "TOFI";
-        static string username = "root";
-        static string password = "root";
+        static string server = "sql11.freesqldatabase.com";
+        static string database = "sql11671897";
+        static string username = "sql11671897";
+        static string password = "LdMIXqLdtS";
         static string constring = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PASSWORD=" + password + ";";
         MySqlConnection connection = new MySqlConnection(constring);
-        List<string> accounts = new List<string>();
+        public List<string> accounts = new List<string>();
         static string[] codes;
 
         public Transaction(int userID_)
@@ -50,7 +53,7 @@ namespace TOFI_project
             connection.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void button1_Click(object sender, EventArgs e)
         {
             int senderCurrency = -1;
             int recipientCurrency = -1;
@@ -66,7 +69,13 @@ namespace TOFI_project
                 MessageBox.Show("Номера счетов отправителя и получателя не могут совпадать.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (Convert.ToDouble(moneyBox.Text) <= 0)
+            if (!Regex.IsMatch(moneyBox.Text, "[+-]?([0-9]*[.])?\\d\\d+"))
+            {
+                MessageBox.Show("Сумма отправляемых средств должна быть целым или вещественным положительным числом c точкой-разделителем.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new TestException("Сумма отправляемых средств должна быть целым или вещественным положительным числом c точкой-разделителем.");
+                //return;
+            }
+            if (Convert.ToDouble(moneyBox.Text, CultureInfo.InvariantCulture) <= 0)
             {
                 MessageBox.Show("Сумма отправляемых средств должна быть больше нуля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -79,7 +88,7 @@ namespace TOFI_project
             {
                 while (reader.Read())
                 {
-                    if (Convert.ToDouble(reader["balance"]) < Convert.ToDouble(moneyBox.Text))
+                    if (Convert.ToDouble(reader["balance"], CultureInfo.InvariantCulture) < Convert.ToDouble(moneyBox.Text, CultureInfo.InvariantCulture))
                     {
                         MessageBox.Show("У Вас недостаточно средств для данного перевода.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         connection.Close();
@@ -116,6 +125,9 @@ namespace TOFI_project
 
             if (senderCurrency != -1 && recipientCurrency != -1)
             {
+                NumberFormatInfo nfi = new NumberFormatInfo();
+                nfi.NumberDecimalSeparator = ".";
+
                 if (senderCurrency == recipientCurrency)
                 {
                     string sendMoney = $"UPDATE BankAccount set balance = balance - {moneyBox.Text} where number = {accounts[comboBox1.SelectedIndex].Split(" ")[0]}";
@@ -137,14 +149,14 @@ namespace TOFI_project
                 {
                     string multi = $"Select exchangeRate from Currency where currencyID = {recipientCurrency};";
                     MySqlCommand multicmd = new MySqlCommand(multi, connection);
-                    double multiplixer = Convert.ToDouble(multicmd.ExecuteScalar());
-                    double newMoney = Convert.ToDouble(moneyBox.Text) / multiplixer;
+                    double multiplixer = Convert.ToDouble(multicmd.ExecuteScalar(), CultureInfo.InvariantCulture);
+                    double newMoney = Convert.ToDouble(moneyBox.Text, CultureInfo.InvariantCulture) / multiplixer;
 
                     string sendMoney = $"UPDATE BankAccount set balance = balance - {moneyBox.Text} where number = {accounts[comboBox1.SelectedIndex].Split(" ")[0]}";
                     MySqlCommand sendcmd = new MySqlCommand(sendMoney, connection);
                     sendcmd.ExecuteNonQuery();
 
-                    string getMoney = $"UPDATE BankAccount set balance = balance + {double.Round(newMoney, 2)} where number = {recipientBox.Text}";
+                    string getMoney = $"UPDATE BankAccount set balance = balance + {double.Round(newMoney, 2).ToString(nfi)} where number = {recipientBox.Text}";
                     MySqlCommand getcmd = new MySqlCommand(getMoney, connection);
                     getcmd.ExecuteNonQuery();
 
@@ -159,14 +171,14 @@ namespace TOFI_project
                 {
                     string multi = $"Select exchangeRate from Currency where currencyID = {senderCurrency};";
                     MySqlCommand multicmd = new MySqlCommand(multi, connection);
-                    double multiplixer = Convert.ToDouble(multicmd.ExecuteScalar());
-                    double newMoney = Convert.ToDouble(moneyBox.Text) * multiplixer;
+                    double multiplixer = Convert.ToDouble(multicmd.ExecuteScalar(), CultureInfo.InvariantCulture);
+                    double newMoney = Convert.ToDouble(moneyBox.Text, CultureInfo.InvariantCulture) * multiplixer;
 
                     string sendMoney = $"UPDATE BankAccount set balance = balance - {moneyBox.Text} where number = {accounts[comboBox1.SelectedIndex].Split(" ")[0]}";
                     MySqlCommand sendcmd = new MySqlCommand(sendMoney, connection);
                     sendcmd.ExecuteNonQuery();
 
-                    string getMoney = $"UPDATE BankAccount set balance = balance + {double.Round(newMoney, 2)} where number = {recipientBox.Text}";
+                    string getMoney = $"UPDATE BankAccount set balance = balance + {double.Round(newMoney, 2).ToString(nfi)} where number = {recipientBox.Text}";
                     MySqlCommand getcmd = new MySqlCommand(getMoney, connection);
                     getcmd.ExecuteNonQuery();
 

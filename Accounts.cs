@@ -5,10 +5,10 @@ namespace TOFI_project
 {
     public partial class Accounts : Form
     {
-        static string server = "localhost";
-        static string database = "TOFI";
-        static string username = "root";
-        static string password = "root";
+        static string server = "sql11.freesqldatabase.com";
+        static string database = "sql11671897";
+        static string username = "sql11671897";
+        static string password = "LdMIXqLdtS";
         static string constring = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PASSWORD=" + password + ";";
         MySqlConnection connection = new MySqlConnection(constring);
 

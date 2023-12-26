@@ -7,10 +7,10 @@ namespace TOFI_project
 {
     public partial class Credit : Form
     {
-        static string server = "localhost";
-        static string database = "TOFI";
-        static string username = "root";
-        static string password = "root";
+        static string server = "sql11.freesqldatabase.com";
+        static string database = "sql11671897";
+        static string username = "sql11671897";
+        static string password = "LdMIXqLdtS";
         static string constring = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PASSWORD=" + password + ";";
         MySqlConnection connection = new MySqlConnection(constring);
 
@@ -90,7 +90,7 @@ namespace TOFI_project
             connection.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void button1_Click(object sender, EventArgs e)
         {
             if (sumBox.Text.Length > 0 && monthsBox.Text.Length > 0 && comboBox1.SelectedIndex != -1)
             {
@@ -99,7 +99,7 @@ namespace TOFI_project
                     MessageBox.Show("Количество месяцев может состоять только из цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                if (!Regex.IsMatch(sumBox.Text, "^(?:-(?:[1-9](?:\\d{0,2}(?:,\\d{3})+|\\d*))|(?:0|(?:[1-9](?:\\d{0,2}(?:,\\d{3})+|\\d*))))(?:.\\d+|)$"))
+                if (!Regex.IsMatch(sumBox.Text, "[+-]?([0-9]*[.])?\\d\\d+"))
                 {
                     MessageBox.Show("Сумма кредита должна быть целым или вещественным числом.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -114,11 +114,11 @@ namespace TOFI_project
                 {
                     while (reader.Read())
                     {
-                        if (Convert.ToDouble(sumBox.Text) >= Convert.ToDouble(reader["minSum"]) && Convert.ToDouble(reader["maxSum"]) >= Convert.ToDouble(sumBox.Text))
+                        if (Convert.ToDouble(sumBox.Text, CultureInfo.InvariantCulture) >= Convert.ToDouble(reader["minSum"], CultureInfo.InvariantCulture) && Convert.ToDouble(reader["maxSum"], CultureInfo.InvariantCulture) >= Convert.ToDouble(sumBox.Text, CultureInfo.InvariantCulture))
                         {
                             if (Convert.ToInt32(monthsBox.Text) >= Convert.ToInt32(reader["minMonths"]) && Convert.ToInt32(reader["maxMonths"]) >= Convert.ToInt32(monthsBox.Text)) 
                             {
-                                double finalSum = double.Round((Convert.ToDouble(reader["interestRate"]) / 1200 * Convert.ToInt32(monthsBox.Text)) * Convert.ToDouble(sumBox.Text) + Convert.ToDouble(sumBox.Text), 2);
+                                double finalSum = double.Round((Convert.ToDouble(reader["interestRate"], CultureInfo.InvariantCulture) / 1200 * Convert.ToInt32(monthsBox.Text)) * Convert.ToDouble(sumBox.Text, CultureInfo.InvariantCulture) + Convert.ToDouble(sumBox.Text, CultureInfo.InvariantCulture), 2);
                                 resultText.Text = $"Финальная сумма кредита - {finalSum}, ежемесячная выплата - {double.Round(finalSum / Convert.ToInt32(monthsBox.Text), 2)}";
                             }
                             else
@@ -147,7 +147,7 @@ namespace TOFI_project
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public void button2_Click(object sender, EventArgs e)
         {
             if (textBox2.Text.Length > 0 && textBox1.Text.Length > 0 && comboBox2.SelectedIndex != -1 && comboBox3.SelectedIndex != -1)
             {
@@ -194,27 +194,27 @@ namespace TOFI_project
                             totalScore += 0;
                         }
 
-                        if (Convert.ToDouble(scorereader["income_per_year"]) < 4800)
+                        if (Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) < 4800)
                         {
                             totalScore -= 5;
                         }
-                        else if (Convert.ToDouble(scorereader["income_per_year"]) >= 4800 && Convert.ToDouble(scorereader["income_per_year"]) < 7200)
+                        else if (Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) >= 4800 && Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) < 7200)
                         {
                             totalScore -= 3;
                         }
-                        else if (Convert.ToDouble(scorereader["income_per_year"]) >= 7200 && Convert.ToDouble(scorereader["income_per_year"]) < 10800)
+                        else if (Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) >= 7200 && Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) < 10800)
                         {
                             totalScore -= 1;
                         }
-                        else if (Convert.ToDouble(scorereader["income_per_year"]) >= 10800 && Convert.ToDouble(scorereader["income_per_year"]) < 13200)
+                        else if (Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) >= 10800 && Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) < 13200)
                         {
                             totalScore += 1;
                         }
-                        else if (Convert.ToDouble(scorereader["income_per_year"]) >= 13200 && Convert.ToDouble(scorereader["income_per_year"]) < 18000)
+                        else if (Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) >= 13200 && Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) < 18000)
                         {
                             totalScore += 3;
                         }
-                        else if (Convert.ToDouble(scorereader["income_per_year"]) >= 18000)
+                        else if (Convert.ToDouble(scorereader["income_per_year"], CultureInfo.InvariantCulture) >= 18000)
                         {
                             totalScore += 5;
                         }
@@ -284,6 +284,10 @@ namespace TOFI_project
                         MessageBox.Show("Ваш кредитный рейтинг слишком низок для выдачи Вам кредита.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         this.Close();
                     }
+                    else
+                    {
+                        MessageBox.Show("С Вашим кредитным рейтингов все в порядке, продолжаем...", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
                 scorereader.Close();
 
@@ -297,11 +301,11 @@ namespace TOFI_project
                 {
                     while (reader.Read())
                     {
-                        if (Convert.ToDouble(textBox2.Text) >= Convert.ToDouble(reader["minSum"]) && Convert.ToDouble(reader["maxSum"]) >= Convert.ToDouble(textBox2.Text))
+                        if (Convert.ToDouble(textBox2.Text, CultureInfo.InvariantCulture) >= Convert.ToDouble(reader["minSum"], CultureInfo.InvariantCulture) && Convert.ToDouble(reader["maxSum"], CultureInfo.InvariantCulture) >= Convert.ToDouble(textBox2.Text, CultureInfo.InvariantCulture))
                         {
                             if (Convert.ToInt32(textBox1.Text) >= Convert.ToInt32(reader["minMonths"]) && Convert.ToInt32(reader["maxMonths"]) >= Convert.ToInt32(textBox1.Text))
                             {
-                                finalSum = double.Round((Convert.ToDouble(reader["interestRate"]) / 1200 * Convert.ToInt32(textBox1.Text)) * Convert.ToDouble(textBox2.Text) + Convert.ToDouble(textBox2.Text), 2);
+                                finalSum = double.Round((Convert.ToDouble(reader["interestRate"], CultureInfo.InvariantCulture) / 1200 * Convert.ToInt32(textBox1.Text)) * Convert.ToDouble(textBox2.Text, CultureInfo.InvariantCulture) + Convert.ToDouble(textBox2.Text, CultureInfo.InvariantCulture), 2);
                                 //resultText.Text = $"Финальная сумма кредита - {finalSum}, ежемесячная выплата - {double.Round(finalSum / Convert.ToInt32(textBox1.Text), 2)}";
                             }
                             else
@@ -323,7 +327,7 @@ namespace TOFI_project
                     MySqlCommand getcmd = new MySqlCommand(getMoney, connection);
                     getcmd.ExecuteNonQuery();
 
-                    string makeLoan = $"insert loan (sum, monthlyPayment, startDate, endDate, userID, currencyID) select '{Convert.ToString(finalSum, CultureInfo.InvariantCulture)}', '{Convert.ToString(double.Round(finalSum / Convert.ToInt32(textBox1.Text), 2), CultureInfo.InvariantCulture)}', current_date(), ADDDATE(current_date(), INTERVAL {textBox1.Text} Month), {userID_}, currencyID from BankAccount where number = {accounts[comboBox3.SelectedIndex].Split(" ")[0]};";
+                    string makeLoan = $"insert Loan (sum, monthlyPayment, startDate, endDate, userID, currencyID) select '{Convert.ToString(finalSum, CultureInfo.InvariantCulture)}', '{Convert.ToString(double.Round(finalSum / Convert.ToInt32(textBox1.Text), 2), CultureInfo.InvariantCulture)}', current_date(), ADDDATE(current_date(), INTERVAL {textBox1.Text} Month), {userID_}, currencyID from BankAccount where number = {accounts[comboBox3.SelectedIndex].Split(" ")[0]};";
                     MySqlCommand makecmd = new MySqlCommand(makeLoan, connection);
                     makecmd.ExecuteNonQuery();
 
